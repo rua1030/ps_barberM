@@ -61,7 +61,7 @@ const Newnav = ()=>{
         })}
         options={{
             tabBarIcon: ({ color, size }) => (
-                <Icon name="calendar" size={size}  />
+                <Icon name="list" size={size}  />
                 
             ),
         }}
@@ -94,7 +94,7 @@ const Newnav = ()=>{
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        bottom: 0,
+        bottom: -1,
         left: 0,
         right: 0,
         

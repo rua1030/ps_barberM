@@ -80,6 +80,7 @@ const Dashboard = () => {
 
   return (
     <View style={styles.container}>
+    
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.cardContainer}>
           {totalPagado && (
@@ -163,6 +164,7 @@ const Dashboard = () => {
                     decimalPlaces: 0,
                     color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                     labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                    formatYLabel: (value) => new Intl.NumberFormat('es-ES').format(value),
                     style: {
                     borderRadius: 16
                     },

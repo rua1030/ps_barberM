@@ -30,7 +30,12 @@ const Home = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [busqueda, setBusqueda] = useState(''); // Estado para el texto de búsqueda
+  const [paginaActual, setPaginaActual] = useState(1);
+  const ordenesPorPagina = 10; 
+
+
+
   const toggleDeleteModalVisibility = () => { 
     setDeleteModalVisible(!isDeleteModalVisible);
   }
@@ -163,6 +168,16 @@ const Home = () => {
     }
   };
 
+  const ordenesFiltradas = empleado.filter(repo =>
+    repo.id_Empleado.toString().includes(busqueda) ||
+    repo.documento.toLowerCase().includes(busqueda.toLowerCase()) ||
+    repo.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+    repo.apellidos.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
+  const indiceFinal = paginaActual * ordenesPorPagina;
+  const indiceInicial = indiceFinal - ordenesPorPagina;
+  const empleadosActuales = ordenesFiltradas.reverse(indiceInicial, indiceFinal);
 
   return (
     <View style={styles.container}>
@@ -173,10 +188,16 @@ const Home = () => {
           resizeMode="contain"
         />
       </View>
+      <TextInput
+              style={styles.inputBusqueda}
+              placeholder="Buscar..."
+              value={busqueda}
+              onChangeText={setBusqueda}
+            />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-      {empleado && (
+      {empleadosActuales && (
         <View>
-          {empleado.map((repo) => (
+          {empleadosActuales.map((repo) => (
             <View key={repo.id_Empleado} style={styles.card}>
               <Text style={styles.cardText}>Documento: {repo.documento}</Text>
               <Text style={styles.cardText}>Nombres: {repo.nombre}</Text>
@@ -208,27 +229,37 @@ const Home = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text>Agregar Empleado!</Text>
+            <Text style={{fontWeight:"bold"}}>Agregar Empleado!</Text>
+            <View style={styles.pickerContainer}>
+
             <Picker
               selectedValue={tipo_documento}
               style={styles.input}
               onValueChange={(itemValue, itemIndex) =>
                 setTipo_documento(itemValue)
               }>
+              <Picker.Item label="Seleccionar Tipo Documento" value={null} />
+
               <Picker.Item label="Cédula" value="CC" />
               <Picker.Item label="Tarjeta de Identidad" value="TI" />
               <Picker.Item label="Cédula de Extranjería" value="CE" />
             </Picker>
+            </View>
+            <View style={styles.pickerContainer}>
+
             <Picker
               selectedValue={id_Tipo_Empleado}
               style={styles.input}
               onValueChange={(itemValue, itemIndex) =>
                 setId_Tipo_Empleado(itemValue)
               }>
+              <Picker.Item label="Seleccionar Rol" value={null} />
               <Picker.Item label="Administrador" value="1" />
               <Picker.Item label="Barbero" value="2" />
               <Picker.Item label="Servicio" value="3" />
+     
             </Picker>
+            </View>
             <TextInput style={styles.input} placeholder="Documento" 
             value={documento}
             onChangeText={(text) => {
@@ -247,13 +278,13 @@ const Home = () => {
               setApellidos(text);
             }}
             />
-            <TextInput style={styles.input} placeholder="Telefono"
+            <TextInput style={styles.input} placeholder="Teléfono"
             value={telefono}
             onChangeText={(text) => {
               setTelefono(text);
             }}
             />
-            <TextInput style={styles.input} placeholder="email"
+            <TextInput style={styles.input} placeholder="Email"
             value={email}
             onChangeText={(text) => {
               setEmail(text);
@@ -293,18 +324,23 @@ const Home = () => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text>Actualizar Empleado</Text>
+            <Text style={{fontWeight:"bold"}}>Actualizar Empleado</Text>
 
+            <View style={styles.pickerContainer}>
             <Picker
               selectedValue={empleadoAEditar?.tipo_documento || ''}
               style={styles.input}
               onValueChange={(itemValue, itemIndex) =>
                 setEmpleadoAEditar({ ...empleadoAEditar, tipo_documento: itemValue })
+
               }>
+                
               <Picker.Item label="Cédula" value="CC" />
               <Picker.Item label="Tarjeta de Identidad" value="TI" />
               <Picker.Item label="Cédula de Extranjería" value="CE" />
             </Picker>
+            </View>
+            <View style={styles.pickerContainer}>
             <Picker
                selectedValue={empleadoAEditar?.id_Tipo_Empleado ? empleadoAEditar.id_Tipo_Empleado.toString() : ''}
                style={styles.input}
@@ -315,6 +351,7 @@ const Home = () => {
               <Picker.Item label="Barbero" value="2" />
               <Picker.Item label="Servicio" value="3" />
             </Picker>
+            </View>
             <TextInput
               style={styles.input}
               placeholder="Documento"
@@ -363,6 +400,7 @@ const Home = () => {
                 setEmpleadoAEditar({ ...empleadoAEditar, contrasena: text });
               }}
               secureTextEntry={true}
+              editable={false} 
             />
 
             <View
@@ -523,7 +561,18 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
+  },inputBusqueda: {
+    height: 40,
+    borderWidth: 1,
+    padding: 10,
+    borderColor: 'gray', // Cambia el color del borde si lo deseas
   },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    marginBottom: 10, // Ajusta este valor según sea necesario
+  }
 });
 
 

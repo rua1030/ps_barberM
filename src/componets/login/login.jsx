@@ -57,7 +57,7 @@ const Login = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Correo"
+        placeholder="Usuario"
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"

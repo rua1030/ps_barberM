@@ -39,10 +39,12 @@ const Citas = () => {
           <View>
             {citas.map((repo) => (
               <View key={repo.id_citas} style={styles.card}>
+                <View style={styles.card2}>
                 <Text style={styles.cardText}>Fecha: {repo.fecha}</Text>
                 <Text style={styles.cardText}>Hora: {repo.hora}</Text>
                 <Text style={styles.cardText}>Nombre del cliente: {repo.nombre_cliente}</Text>
                 <Text style={styles.cardText}>Servicios: {repo.servicios_realizados}</Text>
+                </View>
               </View>
             ))}
           </View>
@@ -59,8 +61,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems:"left",
+    justifyContent: "end",
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
@@ -86,13 +88,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 10,
     marginBottom: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center', 
+    alignItems: 'center',
+   
+  },
+   card: {
+    backgroundColor: "#000",
+    padding: 15,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    marginBottom: 10,
+    justifyContent: 'center', 
+    alignItems: 'center',
+   
   },
   cardText: {
-    textAlign: "center",
+   
     color: "#fff",
-    marginBottom: 5,
+    
   },
 });
 
